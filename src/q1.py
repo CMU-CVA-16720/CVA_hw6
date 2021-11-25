@@ -71,10 +71,6 @@ def renderNDotLSphere(center, rad, light, pxSize, res):
                 ## Outside circle; make black
                 image[row,col] = 0
     image /= np.max(image)
-    plt.imshow(image, cmap='gray')
-    plt.show()
-
-    image = None
     return image
 
 
@@ -126,7 +122,6 @@ def loadData(path = "../data/"):
                 I = np.vstack((I, img.flatten()))
         else:
             L = np.transpose(np.load(file_path))
-
     return I, L, s
 
 
@@ -270,19 +265,22 @@ def plotSurface(surface):
 if __name__ == '__main__':
 
     ## 1.b. Rendering
-    # center = np.array([0,0,0])
-    # rad = 0.75 # in cm
-    # light_srcs = np.array([
-    #     [1,1,1],
-    #     [1,-1,1],
-    #     [-1,-1,1]
-    # ])
-    # light_srcs = light_srcs/(3**(1/2))
-    # pxSize = 7 # in um
-    # res = np.array([3840,2160])
-    # for i in range(0,light_srcs.shape[0]):
-    #     light = light_srcs[i,:]
-    #     renderNDotLSphere(center, rad, light, pxSize, res)
+    center = np.array([0,0,0])
+    rad = 0.75 # in cm
+    light_srcs = np.array([
+        [1,1,1],
+        [1,-1,1],
+        [-1,-1,1]
+    ])
+    light_srcs = light_srcs/(3**(1/2))
+    pxSize = 7 # in um
+    res = np.array([3840,2160])
+    for i in range(0,light_srcs.shape[0]):
+        light = light_srcs[i,:]
+        rendr = renderNDotLSphere(center, rad, light, pxSize, res)
+        plt.imshow(rendr, cmap='gray')
+        plt.show()
+
     ## 1.c. load data
     loadData()
     pass
