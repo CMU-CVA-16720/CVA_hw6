@@ -247,8 +247,8 @@ def estimateShape(normals, s):
     n1 = normals[0,:].reshape(s)
     n2 = normals[1,:].reshape(s)
     n3 = normals[2,:].reshape(s)
-    dfdx = -n1/n3
-    dfdy = -n2/n3
+    dfdx = n1/n3
+    dfdy = n2/n3
     surface = integrateFrankot(dfdx, dfdy)
     return surface
 
