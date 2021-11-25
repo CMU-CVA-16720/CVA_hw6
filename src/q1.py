@@ -270,6 +270,17 @@ def plotSurface(surface):
         None
 
     """
+    # Create grid
+    x = np.arange(0, surface.shape[1])
+    y = np.arange(0, surface.shape[0])
+    X, Y = np.meshgrid(x,y)
+    # Plot
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    ax.plot_surface(X, Y, surface, cmap='coolwarm')
+    plt.show()
+    
+
 
     pass
 
@@ -298,7 +309,7 @@ if __name__ == '__main__':
     ## 1.e. Pseudonormal & Albedo
     B = estimatePseudonormalsCalibrated(I, L)
     albedos, normals = estimateAlbedosNormals(B)
-    displayAlbedosNormals(albedos, normals, s)
+    # displayAlbedosNormals(albedos, normals, s)
     ## 1.i. Depth
     surface = estimateShape(normals, s)
     plotSurface(surface)
