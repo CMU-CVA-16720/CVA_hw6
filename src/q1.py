@@ -207,9 +207,16 @@ def displayAlbedosNormals(albedos, normals, s):
         Normals reshaped as an s x 3 image
 
     """
-
-    albedoIm = None
-    normalIm = None
+    albedoIm = albedos.reshape(s)
+    normalIm = np.stack((
+        normals[0,:].reshape(s),
+        normals[1,:].reshape(s),
+        normals[2,:].reshape(s)), axis=2)
+    plt.imshow(albedoIm,cmap='coolwarm')
+    plt.show()
+    plt.imshow(normalIm,cmap='rainbow')
+    plt.show()
+    
 
     return albedoIm, normalIm
 
@@ -286,11 +293,6 @@ if __name__ == '__main__':
     ## 1.e. Pseudonormal & Albedo
     B = estimatePseudonormalsCalibrated(I, L)
     albedos, normals = estimateAlbedosNormals(B)
-    plt.imshow(albedos.reshape(s),cmap='gray')
-    plt.show()
-    plt.imshow(np.stack((
-        normals[0,:].reshape(s),
-        normals[1,:].reshape(s),
-        normals[2,:].reshape(s)),axis=2),cmap='rainbow')
-    plt.show()
+    displayAlbedosNormals(albedos, normals, s)
+    
     pass
