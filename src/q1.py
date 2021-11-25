@@ -9,6 +9,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from utils import integrateFrankot
 
+from math import floor, ceil
+
 def renderNDotLSphere(center, rad, light, pxSize, res):
 
     """
@@ -22,25 +24,54 @@ def renderNDotLSphere(center, rad, light, pxSize, res):
     Parameters
     ----------
     center : numpy.ndarray
-        The center of the hemispherical bowl in an array of size (3,)
+        The center of the hemispherical bowl in an array of size (3,) [x,y,z]
 
     rad : float
-        The radius of the bowl
+        The radius of the ball in cm
 
     light : numpy.ndarray
-        The direction of incoming light
+        The direction of incoming light [x,y,z]
 
     pxSize : float
-        Pixel size
+        Pixel size in um
 
     res : numpy.ndarray
-        The resolution of the camera frame
+        The resolution of the camera frame [row,col]
 
     Returns
     -------
     image : numpy.ndarray
         The rendered image of the hemispherical bowl
     """
+    ball_centr = np.array([res[0]//2, res[1]//2]) # row,col
+    R = floor(rad*10**4/pxSize) # in pixels
+    image = np.zeros(res)
+    # Compute unit vector s
+    s = np.copy(light)
+    s = s/np.linalg.norm(s)
+    for row in range(ball_centr[0]-R, ball_centr[0]+R):
+        for col in range(ball_centr[1]-R, ball_centr[1]+R):
+            # Shift coord
+            y = ball_centr[0]-row
+            x = col - ball_centr[1]
+            # Check if inside circle
+            if(x**2+y**2 <= R**2):
+                ## Inside circle; render
+                # Compute z
+                z = (R**2-x**2-y**2)**(1/2)
+                # Compute unit vector n
+                n = np.array([x,y,z])
+                n = n/np.linalg.norm(n)
+                # Compute I
+                I = np.dot(n,s)
+                image[row,col] = I
+                pass
+            else:
+                ## Outside circle; make black
+                image[row,col] = 0
+    image /= np.max(image)
+    plt.imshow(image, cmap='gray')
+    plt.show()
 
     image = None
     return image
@@ -219,5 +250,18 @@ def plotSurface(surface):
 
 if __name__ == '__main__':
 
-    # Put your main code here
+    # 1.b. Rendering
+    center = np.array([0,0,0])
+    rad = 0.75 # in cm
+    light_srcs = np.array([
+        [1,1,1],
+        [1,-1,1],
+        [-1,-1,1]
+    ])
+    light_srcs = light_srcs/(3**(1/2))
+    pxSize = 7 # in um
+    res = np.array([3840,2160])
+    for i in range(0,light_srcs.shape[0]):
+        light = light_srcs[i,:]
+        renderNDotLSphere(center, rad, light, pxSize, res)
     pass
