@@ -243,8 +243,13 @@ def estimateShape(normals, s):
         The image, of size s, of estimated depths at each point
 
     """
-
     surface = None
+    n1 = normals[0,:].reshape(s)
+    n2 = normals[1,:].reshape(s)
+    n3 = normals[2,:].reshape(s)
+    dfdx = -n1/n3
+    dfdy = -n2/n3
+    surface = integrateFrankot(dfdx, dfdy)
     return surface
 
 
@@ -294,5 +299,8 @@ if __name__ == '__main__':
     B = estimatePseudonormalsCalibrated(I, L)
     albedos, normals = estimateAlbedosNormals(B)
     displayAlbedosNormals(albedos, normals, s)
+    ## 1.i. Depth
+    surface = estimateShape(normals, s)
+    plotSurface(surface)
     
     pass
