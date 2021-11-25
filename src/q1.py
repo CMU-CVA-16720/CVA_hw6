@@ -146,8 +146,8 @@ def estimatePseudonormalsCalibrated(I, L):
     B : numpy.ndarray
         The 3 x P matrix of pesudonormals
     """
-
-    B = None
+    # Use left pseudo-inverse
+    B = np.linalg.inv(L@np.transpose(L))@L@I
     return B
 
 
@@ -172,8 +172,8 @@ def estimateAlbedosNormals(B):
         The 3 x P matrix of normals
     '''
 
-    albedos = None
-    normals = None
+    albedos = np.linalg.norm(B,axis=0)
+    normals = B/albedos
     return albedos, normals
 
 
@@ -265,22 +265,32 @@ def plotSurface(surface):
 if __name__ == '__main__':
 
     ## 1.b. Rendering
-    center = np.array([0,0,0])
-    rad = 0.75 # in cm
-    light_srcs = np.array([
-        [1,1,1],
-        [1,-1,1],
-        [-1,-1,1]
-    ])
-    light_srcs = light_srcs/(3**(1/2))
-    pxSize = 7 # in um
-    res = np.array([3840,2160])
-    for i in range(0,light_srcs.shape[0]):
-        light = light_srcs[i,:]
-        rendr = renderNDotLSphere(center, rad, light, pxSize, res)
-        plt.imshow(rendr, cmap='gray')
-        plt.show()
+    # center = np.array([0,0,0])
+    # rad = 0.75 # in cm
+    # light_srcs = np.array([
+    #     [1,1,1],
+    #     [1,-1,1],
+    #     [-1,-1,1]
+    # ])
+    # light_srcs = light_srcs/(3**(1/2))
+    # pxSize = 7 # in um
+    # res = np.array([3840,2160])
+    # for i in range(0,light_srcs.shape[0]):
+    #     light = light_srcs[i,:]
+    #     rendr = renderNDotLSphere(center, rad, light, pxSize, res)
+    #     plt.imshow(rendr, cmap='gray')
+    #     plt.show()
 
     ## 1.c. load data
-    loadData()
+    I, L, s = loadData()
+    ## 1.e. Pseudonormal & Albedo
+    B = estimatePseudonormalsCalibrated(I, L)
+    albedos, normals = estimateAlbedosNormals(B)
+    plt.imshow(albedos.reshape(s),cmap='gray')
+    plt.show()
+    plt.imshow(np.stack((
+        normals[0,:].reshape(s),
+        normals[1,:].reshape(s),
+        normals[2,:].reshape(s)),axis=2),cmap='rainbow')
+    plt.show()
     pass
