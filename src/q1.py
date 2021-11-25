@@ -10,6 +10,7 @@ from matplotlib import pyplot as plt
 from utils import integrateFrankot
 
 from math import floor, ceil
+import os
 
 def renderNDotLSphere(center, rad, light, pxSize, res):
 
@@ -103,10 +104,28 @@ def loadData(path = "../data/"):
         Image shape
 
     """
-
     I = None
     L = None
     s = None
+    data_files = os.listdir(path)
+    data_files.sort()
+    I = np.array([])
+    for file in data_files:
+        file_path = os.path.join(path, file)
+        if('input' in file):
+            ## Image file
+            # Import
+            img = plt.imread(file_path)
+            # make gray
+            img = img[:,:,0]*0.3 + img[:,:,1]*0.59 + img[:,:,2]*0.11
+            # Append
+            if(I.size == 0):
+                I = img.flatten()
+                s = img.shape
+            else:
+                I = np.vstack((I, img.flatten()))
+        else:
+            L = np.transpose(np.load(file_path))
 
     return I, L, s
 
@@ -250,18 +269,20 @@ def plotSurface(surface):
 
 if __name__ == '__main__':
 
-    # 1.b. Rendering
-    center = np.array([0,0,0])
-    rad = 0.75 # in cm
-    light_srcs = np.array([
-        [1,1,1],
-        [1,-1,1],
-        [-1,-1,1]
-    ])
-    light_srcs = light_srcs/(3**(1/2))
-    pxSize = 7 # in um
-    res = np.array([3840,2160])
-    for i in range(0,light_srcs.shape[0]):
-        light = light_srcs[i,:]
-        renderNDotLSphere(center, rad, light, pxSize, res)
+    ## 1.b. Rendering
+    # center = np.array([0,0,0])
+    # rad = 0.75 # in cm
+    # light_srcs = np.array([
+    #     [1,1,1],
+    #     [1,-1,1],
+    #     [-1,-1,1]
+    # ])
+    # light_srcs = light_srcs/(3**(1/2))
+    # pxSize = 7 # in um
+    # res = np.array([3840,2160])
+    # for i in range(0,light_srcs.shape[0]):
+    #     light = light_srcs[i,:]
+    #     renderNDotLSphere(center, rad, light, pxSize, res)
+    ## 1.c. load data
+    loadData()
     pass
