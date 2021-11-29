@@ -30,11 +30,28 @@ def estimatePseudonormalsUncalibrated(I):
 
     B = None
     L = None
+    # SVD to get U, S, VT
+    U, S, VT = np.linalg.svd(I, False)
+    # Force rank constraint by modifying S
+    S[3:] = 0
+    # Recompute I
+    I2 = U@np.diag(S)@VT
+    # Recompute U, VT
+    U2, _, VT2 = np.linalg.svd(I2, False)
+    # Breakout into B and L
+    L = U[0:3, :]
+    B = VT[0:3, :]
 
     return B, L
 
 
 if __name__ == "__main__":
 
-    # Put your main code here
+    # Get data
+    I, L, s = loadData()
+    # Compute ambiguous data
+    B, Lhat = estimatePseudonormalsUncalibrated(I)
+    # Compare
+    print('L = \n{}'.format(L))
+    print('Lhat = \n{}'.format(Lhat))
     pass
