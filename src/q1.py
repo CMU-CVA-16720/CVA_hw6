@@ -8,6 +8,8 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from utils import integrateFrankot
+import skimage.color
+import cv2
 
 from math import floor, ceil
 import os
@@ -117,9 +119,9 @@ def loadData(path = "../data/"):
         if('input' in file):
             ## Image file
             # Import
-            img = plt.imread(file_path)
-            # make gray
-            img = img[:,:,0]*0.3 + img[:,:,1]*0.59 + img[:,:,2]*0.11
+            img = cv2.imread(file_path, -1)
+            # get intensities
+            img = skimage.color.rgb2xyz(img)[:,:,1]
             # Append
             if(I.size == 0):
                 I = img.flatten()
@@ -294,21 +296,22 @@ def plotSurface(surface):
 if __name__ == '__main__':
 
     ## 1.b. Rendering
-    center = np.array([0,0,0]) # in pixels
-    rad = 0.75 # in cm
-    light_srcs = np.array([
-        [1,1,1],
-        [1,-1,1],
-        [-1,-1,1]
-    ])
-    light_srcs = light_srcs/(3**(1/2))
-    pxSize = 7 # in um
-    res = np.array([3840,2160])
-    for i in range(0,light_srcs.shape[0]):
-        light = light_srcs[i,:]
-        rendr = renderNDotLSphere(center, rad, light, pxSize, res)
-        plt.imshow(rendr, cmap='gray')
-        plt.show()
+    if False:
+        center = np.array([0,0,0]) # in pixels
+        rad = 0.75 # in cm
+        light_srcs = np.array([
+            [1,1,1],
+            [1,-1,1],
+            [-1,-1,1]
+        ])
+        light_srcs = light_srcs/(3**(1/2))
+        pxSize = 7 # in um
+        res = np.array([3840,2160])
+        for i in range(0,light_srcs.shape[0]):
+            light = light_srcs[i,:]
+            rendr = renderNDotLSphere(center, rad, light, pxSize, res)
+            plt.imshow(rendr, cmap='gray')
+            plt.show()
 
     ## 1.c. load data
     I, L, s = loadData()
