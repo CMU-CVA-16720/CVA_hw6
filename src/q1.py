@@ -220,7 +220,7 @@ def displayAlbedosNormals(albedos, normals, s):
         normals[0,:].reshape(s),
         normals[1,:].reshape(s),
         normals[2,:].reshape(s)), axis=2)
-    plt.imshow(albedoIm,cmap='coolwarm')
+    plt.imshow(albedoIm,cmap='gray')
     plt.show()
     plt.imshow(normalIm,cmap='rainbow')
     plt.show()
@@ -318,9 +318,11 @@ if __name__ == '__main__':
     ## 1.e. Pseudonormal & Albedo
     B = estimatePseudonormalsCalibrated(I, L)
     albedos, normals = estimateAlbedosNormals(B)
-    # displayAlbedosNormals(albedos, normals, s)
+    if True:
+        displayAlbedosNormals(albedos, normals, s)
     ## 1.i. Depth
     surface = estimateShape(normals, s)
-    plotSurface(surface)
+    if True:
+        plotSurface(surface)
     
     pass
