@@ -37,16 +37,16 @@ def renderNDotLSphere(center, rad, light, pxSize, res):
         Pixel size in um
 
     res : numpy.ndarray
-        The resolution of the camera frame [row,col]
+        The resolution of the camera frame [width,height]
 
     Returns
     -------
     image : numpy.ndarray
         The rendered image of the hemispherical bowl
     """
-    ball_centr = np.array([res[0]//2, res[1]//2]) # row,col
+    ball_centr = np.array([res[1]//2, res[0]//2]) # col, row
     R = floor(rad*10**4/pxSize) # in pixels
-    image = np.zeros(res)
+    image = np.zeros((res[1],res[0]))
     # Compute unit vector s
     s = np.copy(light)
     s = s/np.linalg.norm(s)
