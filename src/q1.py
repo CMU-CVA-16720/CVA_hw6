@@ -51,8 +51,12 @@ def renderNDotLSphere(center, rad, light, pxSize, res):
     # Compute unit vector s
     s = np.copy(light)
     s = s/np.linalg.norm(s)
-    for row in range(ball_centr[0]-R, ball_centr[0]+R):
-        for col in range(ball_centr[1]-R, ball_centr[1]+R):
+    row_min = max(ball_centr[0]-R,0)
+    row_max = min(ball_centr[0]+R, res[1]-1)
+    col_min = max(ball_centr[1]-R,0)
+    col_max = min(ball_centr[1]+R, res[0]-1)
+    for row in range(row_min, row_max):
+        for col in range(col_min, col_max):
             # Shift coord
             y = ball_centr[0]-row
             x = col - ball_centr[1]
