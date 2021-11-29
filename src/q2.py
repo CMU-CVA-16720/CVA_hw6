@@ -50,8 +50,30 @@ if __name__ == "__main__":
     # Get data
     I, L, s = loadData()
     # Compute ambiguous data
-    B, Lhat = estimatePseudonormalsUncalibrated(I)
+    Bhat, Lhat = estimatePseudonormalsUncalibrated(I)
     # Compare
     print('L = \n{}'.format(L))
     print('Lhat = \n{}'.format(Lhat))
+    # 2.d
+    albedos, normals = estimateAlbedosNormals(Bhat)
+    surface = estimateShape(normals, s)
+    plotSurface(surface)
+    # 2.e.
+    normals2 = enforceIntegrability(normals, s)
+    surface2 = estimateShape(normals2, s)
+    plotSurface(surface2)
+    # 2.f.
+    # Parameters
+    mu = 0.1
+    v = 1
+    lambda_ = 1 # > 0
+    # G
+    G = np.eye(3)
+    G[2,:] = np.array([mu, v, lambda_])
+    # New B
+    B = np.linalg.inv(np.transpose(G))@Bhat
+    albedos, normals = estimateAlbedosNormals(B)
+    normals = enforceIntegrability(normals, s)
+    surface = estimateShape(normals, s)
+    plotSurface(surface)
     pass
