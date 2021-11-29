@@ -44,7 +44,8 @@ def renderNDotLSphere(center, rad, light, pxSize, res):
     image : numpy.ndarray
         The rendered image of the hemispherical bowl
     """
-    ball_centr = np.array([res[1]//2, res[0]//2]) # col, row
+    ball_centr = np.array([res[1]//2, res[0]//2, 0]) # row, col, center of frame
+    ball_centr += np.array([center[1], center[0], center[2]]) # coordinate offset
     R = floor(rad*10**4/pxSize) # in pixels
     image = np.zeros((res[1],res[0]))
     # Compute unit vector s
@@ -289,7 +290,7 @@ def plotSurface(surface):
 if __name__ == '__main__':
 
     ## 1.b. Rendering
-    center = np.array([0,0,0])
+    center = np.array([0,0,0]) # in pixels
     rad = 0.75 # in cm
     light_srcs = np.array([
         [1,1,1],
