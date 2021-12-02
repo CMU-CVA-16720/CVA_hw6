@@ -37,10 +37,10 @@ def estimatePseudonormalsUncalibrated(I):
     # Recompute I
     I2 = U@np.diag(S)@VT
     # Recompute U, VT
-    U2, _, VT2 = np.linalg.svd(I2, False)
+    U2, S2, VT2 = np.linalg.svd(I2, False)
     # Breakout into B and L
-    L = U[0:3, :]
-    B = VT[0:3, :]
+    L = (U2@np.diag(S2))[0:3, :]
+    B = VT2[0:3, :]
 
     return B, L
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # 2.e.
     normals2 = enforceIntegrability(normals, s)
     surface2 = estimateShape(normals2, s)
-    if False:
+    if True:
         plotSurface(surface2)
     # 2.f.
     # Parameters
@@ -78,5 +78,6 @@ if __name__ == "__main__":
     normals_new = np.linalg.inv(np.transpose(G))@normals
     normals_new = normals_new/np.linalg.norm(normals_new,axis=0)
     surface = estimateShape(normals_new, s)
-    plotSurface(surface)
+    if False:
+        plotSurface(surface)
     pass
