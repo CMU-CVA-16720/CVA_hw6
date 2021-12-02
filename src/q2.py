@@ -51,7 +51,11 @@ if __name__ == "__main__":
     I, L, s = loadData()
     # Compute ambiguous data
     Bhat, Lhat = estimatePseudonormalsUncalibrated(I)
-    # Compare
+    # 2.b.
+    albedos, normals = estimateAlbedosNormals(Bhat)
+    if False:
+        displayAlbedosNormals(albedos, normals, s)
+    # 2.c.
     print('L = \n{}'.format(L))
     print('Lhat = \n{}'.format(Lhat))
     # 2.d
@@ -62,7 +66,7 @@ if __name__ == "__main__":
     # 2.e.
     normals2 = enforceIntegrability(normals, s)
     surface2 = estimateShape(normals2, s)
-    if True:
+    if False:
         plotSurface(surface2)
     # 2.f.
     # Parameters
