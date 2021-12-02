@@ -299,7 +299,7 @@ def plotSurface(surface):
 if __name__ == '__main__':
 
     ## 1.b. Rendering
-    if False:
+    if True:
         center = np.array([0,0,0]) # in pixels
         rad = 0.75 # in cm
         light_srcs = np.array([

@@ -53,7 +53,7 @@ if __name__ == "__main__":
     Bhat, Lhat = estimatePseudonormalsUncalibrated(I)
     # 2.b.
     albedos, normals = estimateAlbedosNormals(Bhat)
-    if False:
+    if True:
         displayAlbedosNormals(albedos, normals, s)
     # 2.c.
     print('L = \n{}'.format(L))
@@ -61,12 +61,12 @@ if __name__ == "__main__":
     # 2.d
     albedos, normals = estimateAlbedosNormals(Bhat)
     surface = estimateShape(normals, s)
-    if False:
+    if True:
         plotSurface(surface)
     # 2.e.
     normals2 = enforceIntegrability(normals, s)
     surface2 = estimateShape(normals2, s)
-    if False:
+    if True:
         plotSurface(surface2)
     # 2.f.
     # Parameters
