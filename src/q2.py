@@ -57,23 +57,26 @@ if __name__ == "__main__":
     # 2.d
     albedos, normals = estimateAlbedosNormals(Bhat)
     surface = estimateShape(normals, s)
-    plotSurface(surface)
+    if False:
+        plotSurface(surface)
     # 2.e.
     normals2 = enforceIntegrability(normals, s)
     surface2 = estimateShape(normals2, s)
-    plotSurface(surface2)
+    if False:
+        plotSurface(surface2)
     # 2.f.
     # Parameters
-    mu = 0.1
-    v = 1
+    mu = 0
+    v = 0
     lambda_ = 1 # > 0
     # G
     G = np.eye(3)
     G[2,:] = np.array([mu, v, lambda_])
     # New B
-    B = np.linalg.inv(np.transpose(G))@Bhat
-    albedos, normals = estimateAlbedosNormals(B)
+    albedos, normals = estimateAlbedosNormals(Bhat)
     normals = enforceIntegrability(normals, s)
-    surface = estimateShape(normals, s)
+    normals_new = np.linalg.inv(np.transpose(G))@normals
+    normals_new = normals_new/np.linalg.norm(normals_new,axis=0)
+    surface = estimateShape(normals_new, s)
     plotSurface(surface)
     pass
