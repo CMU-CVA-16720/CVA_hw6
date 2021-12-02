@@ -220,6 +220,9 @@ def displayAlbedosNormals(albedos, normals, s):
         normals[0,:].reshape(s),
         normals[1,:].reshape(s),
         normals[2,:].reshape(s)), axis=2)
+    # normalIm ranges from -1 to 1
+    # negative values and values above 1 don't display properly using rainbow
+    normalIm = (normalIm+1)/2
     plt.imshow(albedoIm,cmap='gray')
     plt.show()
     plt.imshow(normalIm,cmap='rainbow')
