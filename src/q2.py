@@ -39,7 +39,9 @@ def estimatePseudonormalsUncalibrated(I):
     # Recompute U, VT
     U2, S2, VT2 = np.linalg.svd(I2, False)
     # Breakout into B and L
-    L = (U2@np.diag(S2))[0:3, :]
+    # L = (U2@np.diag(S2))[0:3, :]
+    L = np.transpose(U2@(np.diag(S2)[:,0:3]))
+
     B = VT2[0:3, :]
 
     return B, L
